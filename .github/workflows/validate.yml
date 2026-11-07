@@ -1,0 +1,31 @@
+name: Validate skills
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  system-explorer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: skills/system-explorer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run model and renderer tests
+        run: python -m unittest discover -s tests
+      - name: Validate bundled examples
+        run: |
+          python scripts/validate_model.py examples/software-system.json
+          python scripts/validate_model.py examples/approval-process.json
+      - name: Render both domains
+        run: |
+          python scripts/render.py examples/software-system.json --output out/software-system.html
+          python scripts/render.py examples/approval-process.json --output out/approval-process.html

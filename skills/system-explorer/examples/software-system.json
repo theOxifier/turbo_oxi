@@ -1,0 +1,479 @@
+{
+  "schema_version": 1,
+  "title": "From request to result",
+  "description": "Illustrative asynchronous job architecture. Explore a successful job and a worker failure. All payloads and state transitions are authored examples; no live telemetry or measured timing is implied. API internals are available through Explore inside.",
+  "perspective": "illustrative",
+  "sources": [],
+  "entities": [
+    {
+      "id": "client",
+      "label": "Client",
+      "kind": "application",
+      "group": "Experience",
+      "description": "Submits a job and checks its result.",
+      "initial_state": "idle",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 140,
+      "y": 120
+    },
+    {
+      "id": "api",
+      "label": "API service",
+      "kind": "service",
+      "group": "Application",
+      "description": "Accepts a request and exposes job status. Select Explore inside to inspect validation and job coordination.",
+      "initial_state": "idle",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 420,
+      "y": 120,
+      "properties": {
+        "contract": "POST /jobs; GET /jobs/{id}",
+        "owner": "Example application team"
+      }
+    },
+    {
+      "id": "queue",
+      "label": "Job queue",
+      "kind": "queue",
+      "group": "Execution",
+      "description": "Buffers accepted jobs until a worker consumes them.",
+      "initial_state": "empty",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 700,
+      "y": 120
+    },
+    {
+      "id": "worker",
+      "label": "Worker",
+      "kind": "service",
+      "group": "Execution",
+      "description": "Processes one job and records a result or failure.",
+      "initial_state": "idle",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 700,
+      "y": 340
+    },
+    {
+      "id": "store",
+      "label": "Result store",
+      "kind": "database",
+      "group": "Persistence",
+      "description": "Holds job state and a result reference.",
+      "initial_state": "no result",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 420,
+      "y": 340
+    },
+    {
+      "id": "validator",
+      "label": "Request validator",
+      "kind": "component",
+      "group": "API internals",
+      "description": "Checks the shape of an incoming job request.",
+      "initial_state": "idle",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "parent_id": "api"
+    },
+    {
+      "id": "coordinator",
+      "label": "Job coordinator",
+      "kind": "component",
+      "group": "API internals",
+      "description": "Creates a job and prepares an enqueue operation.",
+      "initial_state": "idle",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "parent_id": "api"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "submit",
+      "from": "client",
+      "to": "api",
+      "label": "Submit job",
+      "kind": "request",
+      "description": "Client submits a synthetic job request.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "properties": {
+        "example contract": {
+          "method": "POST",
+          "path": "/jobs",
+          "body": {
+            "input_ref": "sample://input"
+          }
+        }
+      }
+    },
+    {
+      "id": "enqueue",
+      "from": "api",
+      "to": "queue",
+      "label": "Enqueue",
+      "kind": "message",
+      "description": "API publishes a job descriptor to the queue.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "properties": {
+        "delivery": "Not specified; no delivery guarantee is inferred."
+      }
+    },
+    {
+      "id": "consume",
+      "from": "queue",
+      "to": "worker",
+      "label": "Deliver job",
+      "kind": "message",
+      "description": "The scenario delivers a queued job to a worker.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "persist",
+      "from": "worker",
+      "to": "store",
+      "label": "Write job status",
+      "kind": "write",
+      "description": "Worker records a result or a failure state.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "read",
+      "from": "store",
+      "to": "api",
+      "label": "Read status",
+      "kind": "data",
+      "description": "API obtains stored job status for a polling response. This edge abstracts a query and result.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "respond",
+      "from": "api",
+      "to": "client",
+      "label": "Return status",
+      "kind": "response",
+      "description": "API returns the latest job status to the client.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "validated",
+      "from": "validator",
+      "to": "coordinator",
+      "label": "Validated request",
+      "kind": "internal handoff",
+      "description": "An accepted request passes to job coordination.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "success",
+      "label": "Successful job",
+      "description": "Follow a request through acceptance, execution, persistence, and a polling response.",
+      "events": [
+        {
+          "id": "submit",
+          "label": "Submit request",
+          "description": "Client submits a synthetic input reference.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "submit",
+          "payload": {
+            "input_ref": "sample://input"
+          },
+          "state_changes": {
+            "client": "waiting",
+            "api": "accepting"
+          }
+        },
+        {
+          "id": "enqueue",
+          "label": "Queue job",
+          "description": "The accepted request becomes a job descriptor.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "enqueue",
+          "payload": {
+            "job_id": "demo-001",
+            "input_ref": "sample://input"
+          },
+          "state_changes": {
+            "api": "accepted",
+            "queue": "job pending"
+          }
+        },
+        {
+          "id": "consume",
+          "label": "Start work",
+          "description": "A worker receives the job.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "consume",
+          "state_changes": {
+            "queue": "empty",
+            "worker": "running"
+          }
+        },
+        {
+          "id": "compute",
+          "label": "Produce result",
+          "description": "The worker completes the authored processing step.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "entity_id": "worker",
+          "payload": {
+            "result_ref": "sample://result"
+          },
+          "state_changes": {
+            "worker": "complete"
+          }
+        },
+        {
+          "id": "save",
+          "label": "Persist success",
+          "description": "Worker stores a completed job status and a result reference.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "persist",
+          "payload": {
+            "job_id": "demo-001",
+            "status": "complete",
+            "result_ref": "sample://result"
+          },
+          "state_changes": {
+            "store": "complete result"
+          }
+        },
+        {
+          "id": "lookup",
+          "label": "Read stored status",
+          "description": "A client poll causes the API to obtain job status; the request leg is abstracted.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "read",
+          "state_changes": {
+            "api": "responding"
+          }
+        },
+        {
+          "id": "reply",
+          "label": "Deliver result reference",
+          "description": "The client receives the completed status.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "respond",
+          "payload": {
+            "status": "complete",
+            "result_ref": "sample://result"
+          },
+          "state_changes": {
+            "client": "result available",
+            "api": "idle"
+          }
+        }
+      ],
+      "outcome": "The client receives a result reference.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "failure",
+      "label": "Worker failure",
+      "description": "Inspect a worker error and how it becomes visible to the caller. Retry policy is deliberately unspecified.",
+      "events": [
+        {
+          "id": "submit",
+          "label": "Submit request",
+          "description": "Client submits a job.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "submit",
+          "state_changes": {
+            "client": "waiting"
+          }
+        },
+        {
+          "id": "enqueue",
+          "label": "Queue job",
+          "description": "API accepts a job descriptor.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "enqueue",
+          "state_changes": {
+            "queue": "job pending"
+          }
+        },
+        {
+          "id": "consume",
+          "label": "Start work",
+          "description": "Worker begins the job.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "consume",
+          "state_changes": {
+            "worker": "running",
+            "queue": "empty"
+          }
+        },
+        {
+          "id": "error",
+          "label": "Processing fails",
+          "description": "An illustrative input error prevents a result. This is an authored failure path.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "entity_id": "worker",
+          "payload": {
+            "error": "INVALID_INPUT",
+            "retryable": false
+          },
+          "state_changes": {
+            "worker": "failed"
+          }
+        },
+        {
+          "id": "record",
+          "label": "Persist failure",
+          "description": "The worker records failure metadata.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "persist",
+          "payload": {
+            "job_id": "demo-002",
+            "status": "failed",
+            "reason": "INVALID_INPUT"
+          },
+          "state_changes": {
+            "store": "failed job"
+          }
+        },
+        {
+          "id": "lookup",
+          "label": "Read failed status",
+          "description": "API obtains the stored failure status.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "read"
+        },
+        {
+          "id": "reply",
+          "label": "Return failure status",
+          "description": "Client receives a terminal failure status.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "respond",
+          "payload": {
+            "status": "failed",
+            "reason": "INVALID_INPUT"
+          },
+          "state_changes": {
+            "client": "failure visible"
+          }
+        }
+      ],
+      "outcome": "The failure is recorded and visible to the caller; no retry policy is asserted.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    }
+  ]
+}

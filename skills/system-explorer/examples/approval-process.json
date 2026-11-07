@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "title": "From request to approval",
+  "description": "Illustrative purchasing process. Explore human handoffs and document state without network terminology. The approval and revision paths use the same model and viewer as the software example. No real policy or monetary threshold is asserted.",
+  "perspective": "illustrative",
+  "sources": [],
+  "entities": [
+    {
+      "id": "requester",
+      "label": "Requester",
+      "kind": "person",
+      "group": "Request",
+      "description": "Prepares a purchasing request.",
+      "initial_state": "draft",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 140,
+      "y": 120
+    },
+    {
+      "id": "manager",
+      "label": "Team manager",
+      "kind": "reviewer",
+      "group": "Review",
+      "description": "Checks the business need and completeness.",
+      "initial_state": "not received",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 420,
+      "y": 120
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "kind": "team",
+      "group": "Approval",
+      "description": "Checks the proposed spend against the illustrative budget policy.",
+      "initial_state": "not received",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 700,
+      "y": 120
+    },
+    {
+      "id": "procurement",
+      "label": "Procurement",
+      "kind": "team",
+      "group": "Fulfillment",
+      "description": "Acts on an approved request.",
+      "initial_state": "not received",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 700,
+      "y": 340
+    },
+    {
+      "id": "register",
+      "label": "Decision register",
+      "kind": "document",
+      "group": "Records",
+      "description": "Records the decision and owner.",
+      "initial_state": "no record",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "x": 420,
+      "y": 340
+    }
+  ],
+  "relationships": [
+    {
+      "id": "request",
+      "from": "requester",
+      "to": "manager",
+      "label": "Submit request",
+      "kind": "handoff",
+      "description": "Requester hands a proposal to the manager.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      },
+      "properties": {
+        "artifact": "Purchase request",
+        "required fields": [
+          "business need",
+          "vendor",
+          "estimated cost"
+        ]
+      }
+    },
+    {
+      "id": "review",
+      "from": "manager",
+      "to": "finance",
+      "label": "Recommend approval",
+      "kind": "handoff",
+      "description": "Manager forwards the reviewed proposal to Finance.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "authorize",
+      "from": "finance",
+      "to": "procurement",
+      "label": "Authorize purchase",
+      "kind": "decision",
+      "description": "Finance sends an approval decision to Procurement.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "record",
+      "from": "procurement",
+      "to": "register",
+      "label": "Record decision",
+      "kind": "recordkeeping",
+      "description": "Procurement records an approved request and the next owner.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "revise",
+      "from": "manager",
+      "to": "requester",
+      "label": "Request revision",
+      "kind": "feedback",
+      "description": "Manager returns an incomplete request for revision.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "approved",
+      "label": "Request approved",
+      "description": "Follow the normal path from submission to a recorded approval.",
+      "events": [
+        {
+          "id": "submit",
+          "label": "Submit proposal",
+          "description": "Requester sends a complete proposal.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "request",
+          "payload": {
+            "request_id": "EX-01",
+            "business_need": "Replace example equipment",
+            "cost": "Synthetic amount omitted"
+          },
+          "state_changes": {
+            "requester": "submitted",
+            "manager": "reviewing"
+          }
+        },
+        {
+          "id": "review",
+          "label": "Recommend approval",
+          "description": "Manager supports the business need.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "review",
+          "state_changes": {
+            "manager": "recommended",
+            "finance": "reviewing"
+          }
+        },
+        {
+          "id": "approve",
+          "label": "Approve spend",
+          "description": "Finance authorizes the illustrative request.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "authorize",
+          "payload": {
+            "decision": "approved",
+            "request_id": "EX-01"
+          },
+          "state_changes": {
+            "finance": "approved",
+            "procurement": "ready"
+          }
+        },
+        {
+          "id": "record",
+          "label": "Record approval",
+          "description": "The decision register captures the outcome.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "record",
+          "payload": {
+            "decision": "approved",
+            "next_owner": "Procurement"
+          },
+          "state_changes": {
+            "register": "approval recorded",
+            "requester": "approved"
+          }
+        }
+      ],
+      "outcome": "Approval is recorded and Procurement owns the next step.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    },
+    {
+      "id": "revision",
+      "label": "Revision requested",
+      "description": "Follow an incomplete proposal back to the requester.",
+      "events": [
+        {
+          "id": "submit",
+          "label": "Submit proposal",
+          "description": "Requester sends an incomplete proposal.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "request",
+          "state_changes": {
+            "requester": "submitted",
+            "manager": "reviewing"
+          }
+        },
+        {
+          "id": "check",
+          "label": "Identify missing information",
+          "description": "Manager notices that the business need is unspecified.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "entity_id": "manager",
+          "payload": {
+            "missing": [
+              "business need"
+            ]
+          },
+          "state_changes": {
+            "manager": "needs revision"
+          }
+        },
+        {
+          "id": "return",
+          "label": "Return for revision",
+          "description": "The proposal returns with a concrete request for missing information.",
+          "evidence": {
+            "status": "illustrative",
+            "note": "Synthetic teaching example; not a claim about an installed system.",
+            "sources": []
+          },
+          "relationship_id": "revise",
+          "payload": {
+            "requested_change": "Add the business need"
+          },
+          "state_changes": {
+            "requester": "revision requested",
+            "manager": "awaiting revision"
+          }
+        }
+      ],
+      "outcome": "The requester owns a revision; no approval has been granted.",
+      "evidence": {
+        "status": "illustrative",
+        "note": "Synthetic teaching example; not a claim about an installed system.",
+        "sources": []
+      }
+    }
+  ]
+}
