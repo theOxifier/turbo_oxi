@@ -49,14 +49,3 @@ python3 scripts/render.py examples/approval-process.json --output out/approval-p
 Open either HTML file in a browser. See the [skill README](skills/system-explorer/README.md)
 for the model format, controls, and validation commands.
 
-## Add another skill
-
-Create `skills/<skill-name>/` with:
-
-- `SKILL.md`: when to use the skill and how to execute its workflow.
-- `README.md`: setup, usage, examples, and any requirements.
-- Scripts, templates, references, and examples needed to make it repeatable.
-- Appropriate checks when the skill includes executable code.
-
-Keep examples synthetic and avoid committing credentials, private inputs, or
-generated project-specific output. Skills should be portable across projects.
