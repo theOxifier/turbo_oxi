@@ -48,4 +48,3 @@ python3 scripts/render.py examples/approval-process.json --output out/approval-p
 
 Open either HTML file in a browser. See the [skill README](skills/system-explorer/README.md)
 for the model format, controls, and validation commands.
-
