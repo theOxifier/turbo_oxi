@@ -9,6 +9,7 @@ needed to use it across projects.
 | Skill | What it does |
 | --- | --- |
 | [System Explorer](skills/system-explorer) | Turns architecture, processes, workflows, protocols, and data flows into interactive explorers with clickable components, scenario playback, and inspectable evidence. |
+| [Tailscale Prototype Launch](skills/tailscale-prototype-launch/SKILL.md) | Publishes a prototype privately with Tailscale Serve and verifies the link. |
 
 ## Get started
 
@@ -16,7 +17,7 @@ needed to use it across projects.
 git clone https://github.com/theOxifier/turbo_oxi.git
 ```
 
-Choose a skill from `skills/` and follow its README. To use it with an agent,
+Choose a skill from `skills/` and follow its `SKILL.md`. To use it with an agent,
 install the complete skill folder in the skill location supported by that
 agent. Each folder includes a `SKILL.md` entry point; retain its bundled files.
 
