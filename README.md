@@ -8,6 +8,7 @@ needed to use it across projects.
 
 | Skill | What it does |
 | --- | --- |
+| [Machine Setup](skills/machine-setup/SKILL.md) | Audits an existing machine and reproduces the relevant developer, agent, desktop, and T3 Code tooling on a new host. |
 | [System Explorer](skills/system-explorer) | Turns architecture, processes, workflows, protocols, and data flows into interactive explorers with clickable components, scenario playback, and inspectable evidence. |
 
 ## Get started
@@ -16,7 +17,7 @@ needed to use it across projects.
 git clone https://github.com/theOxifier/turbo_oxi.git
 ```
 
-Choose a skill from `skills/` and follow its README. To use it with an agent,
+Choose a skill from `skills/` and follow its `SKILL.md`. To use it with an agent,
 install the complete skill folder in the skill location supported by that
 agent. Each folder includes a `SKILL.md` entry point; retain its bundled files.
 
